@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Admin panelė</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button color="danger" (click)="logout()">
+        Atsijungti
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- ❗️ JEI DUOMENŲ NĖRA -->
+  <div *ngIf="records.length === 0" style="text-align:center; margin-top:40px;">
+    <ion-text color="medium">
+      <h2>📭 Duomenų nėra</h2>
+      <p>Kol kas naudotojai nepateikė jokių įrašų.</p>
+    </ion-text>
+  </div>
+
+  <!-- ✅ JEI DUOMENYS YRA -->
+  <ion-list *ngIf="records.length > 0">
+    <ion-item *ngFor="let record of records">
+      <ion-label>
+        <img [src]="record.image"
+             style="width:100%; border-radius:10px;" />
+      </ion-label>
+
+      <ion-button color="danger"
+                  fill="clear"
+                  (click)="deleteRecord(record.id)">
+        Trinti
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

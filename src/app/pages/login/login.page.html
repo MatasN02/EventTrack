@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Prisijungimas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-input type="email"
+               placeholder="El. paštas"
+               [(ngModel)]="email">
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-input type="password"
+               placeholder="Slaptažodis"
+               [(ngModel)]="password">
+    </ion-input>
+  </ion-item>
+
+  <ion-button expand="block" (click)="login()">
+    Prisijungti
+  </ion-button>
+
+  <ion-button fill="clear" routerLink="/register">
+    Registruotis
+  </ion-button>
+</ion-content>
