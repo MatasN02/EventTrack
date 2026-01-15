@@ -7,40 +7,36 @@ import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
 
-  // 🔹 Pradinis puslapis
   {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
   },
 
-  // 🔹 Naudotojo prisijungimas
   {
     path: 'login',
     component: LoginPage
   },
 
-  // 🔹 Naudotojo registracija
   {
     path: 'register',
     component: RegisterPage
   },
 
-  // 🔹 Naudotojo pagrindinis langas
   {
     path: 'home',
     loadComponent: () =>
       import('./home/home.page').then(m => m.HomePage)
   },
 
-  // 🔹 Kamera / nuotraukų darymas
+  // ✅ EVENTS per MODULE
   {
-    path: 'scan',
+    path: 'events',
     loadComponent: () =>
-      import('./pages/scan/scan.page').then(m => m.ScanPage)
+      import('./pages/events/events.page')
+        .then(m => m.EventsPage)
   },
 
-  // 🔹 ADMIN prisijungimas
   {
     path: 'admin-login',
     loadComponent: () =>
@@ -48,7 +44,6 @@ const routes: Routes = [
         .then(m => m.AdminLoginPage)
   },
 
-  // 🔹 ADMIN panelė (APSAUGOTA GUARD)
   {
     path: 'admin',
     canActivate: [AdminGuard],
@@ -57,12 +52,10 @@ const routes: Routes = [
         .then(m => m.AdminPage)
   },
 
-  // 🔹 Netinkamas adresas
   {
     path: '**',
     redirectTo: 'login'
   }
-
 ];
 
 @NgModule({

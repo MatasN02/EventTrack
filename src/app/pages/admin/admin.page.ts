@@ -1,42 +1,69 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { Router } from '@angular/router';
-
-import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  updateDoc,
+  deleteDoc,
+  doc
+} from 'firebase/firestore';
 import { FirebaseService } from '../../services/firebase.service';
 
 @Component({
-  standalone: true,
   selector: 'app-admin',
+  standalone: true,
+  imports: [CommonModule, IonicModule],
   templateUrl: './admin.page.html',
-  styleUrls: ['./admin.page.scss'],
-  imports: [IonicModule, CommonModule]
+  styleUrls: ['./admin.page.scss']
 })
 export class AdminPage implements OnInit {
 
-  records: any[] = [];
+  events: any[] = [];
 
-  constructor(
-    private firebase: FirebaseService,
-    private router: Router
-  ) { }
+  constructor(private firebase: FirebaseService) { }
 
   async ngOnInit() {
-    const snapshot = await getDocs(collection(this.firebase['db'], 'photos'));
-    this.records = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
+    await this.loadEvents();
+  }
+
+  async loadEvents() {
+    const db = this.firebase.getDb();
+    const snapshot = await getDocs(collection(db, 'events'));
+
+    this.events = snapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data()
     }));
   }
 
-  async deleteRecord(id: string) {
-    await deleteDoc(doc(this.firebase['db'], 'photos', id));
-    this.records = this.records.filter(r => r.id !== id);
+  // ✅ APPROVE
+  async approveEvent(id: string) {
+    const db = this.firebase.getDb();
+
+    await updateDoc(doc(db, 'events', id), {
+      status: 'Approved'
+    });
+
+    await this.loadEvents();
   }
 
-  async logout() {
-    await this.firebase.logout();
-    this.router.navigateByUrl('/admin-login');
+  // ❌ REJECT
+  async rejectEvent(id: string) {
+    const db = this.firebase.getDb();
+
+    await updateDoc(doc(db, 'events', id), {
+      status: 'Rejected'
+    });
+
+    await this.loadEvents();
+  }
+
+  // 🗑 DELETE
+  async deleteEvent(id: string) {
+    const db = this.firebase.getDb();
+
+    await deleteDoc(doc(db, 'events', id));
+    this.events = this.events.filter(e => e.id !== id);
   }
 }
