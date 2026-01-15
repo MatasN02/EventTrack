@@ -1,31 +1,33 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-
-import { AuthService } from '../services/auth.service';
+import { RouterModule, Router } from '@angular/router';
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
-  standalone: true,
   selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
-  imports: [IonicModule, CommonModule]
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
+  standalone: true,
+  imports: [IonicModule, CommonModule, RouterModule]
 })
 export class HomePage {
 
   constructor(
-    private authService: AuthService,
+    private firebase: FirebaseService,
     private router: Router
   ) { }
 
-  logout() {
-    this.authService.logout()
-      .then(() => {
-        this.router.navigateByUrl('/login');
-      })
-      .catch(err => {
-        alert(err.message);
-      });
+  async logout() {
+    try {
+      await this.firebase.logout();
+
+      // 🔑 LABAI SVARBU
+      this.router.navigateByUrl('/login', { replaceUrl: true });
+
+      console.log('✅ Atsijungta');
+    } catch (err) {
+      console.error('❌ Logout error', err);
+    }
   }
 }

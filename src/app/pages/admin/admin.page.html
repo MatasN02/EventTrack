@@ -1,39 +1,46 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Admin panelė</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button color="danger" (click)="logout()">
-        Atsijungti
-      </ion-button>
-    </ion-buttons>
+    <ion-title>👮‍♂️ Admin – Renginių valdymas</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
 
-  <!-- ❗️ JEI DUOMENŲ NĖRA -->
-  <div *ngIf="records.length === 0" style="text-align:center; margin-top:40px;">
-    <ion-text color="medium">
-      <h2>📭 Duomenų nėra</h2>
-      <p>Kol kas naudotojai nepateikė jokių įrašų.</p>
-    </ion-text>
-  </div>
-
-  <!-- ✅ JEI DUOMENYS YRA -->
-  <ion-list *ngIf="records.length > 0">
-    <ion-item *ngFor="let record of records">
+  <ion-list *ngIf="events.length > 0">
+    <ion-item *ngFor="let event of events">
       <ion-label>
-        <img [src]="record.image"
-             style="width:100%; border-radius:10px;" />
+        <h2>{{ event.title }}</h2>
+        <p>{{ event.date }} – {{ event.location }}</p>
+        <p>Statusas: <b>{{ event.status }}</b></p>
       </ion-label>
 
+      <!-- APPROVE -->
+      <ion-button color="success"
+                  fill="clear"
+                  *ngIf="event.status !== 'Approved'"
+                  (click)="approveEvent(event.id)">
+        ✅
+      </ion-button>
+
+      <!-- REJECT -->
+      <ion-button color="warning"
+                  fill="clear"
+                  *ngIf="event.status !== 'Rejected'"
+                  (click)="rejectEvent(event.id)">
+        ❌
+      </ion-button>
+
+      <!-- DELETE -->
       <ion-button color="danger"
                   fill="clear"
-                  (click)="deleteRecord(record.id)">
-        Trinti
+                  (click)="deleteEvent(event.id)">
+        🗑
       </ion-button>
     </ion-item>
   </ion-list>
+
+  <ion-text *ngIf="events.length === 0">
+    Nėra renginių
+  </ion-text>
 
 </ion-content>

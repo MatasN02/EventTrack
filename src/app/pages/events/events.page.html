@@ -1,0 +1,112 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Renginių valdymas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- 📝 CREATE / EDIT FORM -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        {{ editingEventId ? 'Redaguoti renginį' : 'Kurti renginį' }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-item>
+        <ion-input label="Pavadinimas"
+                   labelPlacement="stacked"
+                   [(ngModel)]="title">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-textarea label="Aprašymas"
+                      labelPlacement="stacked"
+                      [(ngModel)]="description">
+        </ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-input type="date"
+                   label="Data"
+                   labelPlacement="stacked"
+                   [(ngModel)]="date">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input label="Vieta"
+                   labelPlacement="stacked"
+                   [(ngModel)]="location">
+        </ion-input>
+      </ion-item>
+
+      <!-- CREATE -->
+      <ion-button expand="block"
+                  color="primary"
+                  *ngIf="!editingEventId"
+                  (click)="createEvent()">
+        ➕ Sukurti renginį
+      </ion-button>
+
+      <!-- UPDATE -->
+      <ion-button expand="block"
+                  color="success"
+                  *ngIf="editingEventId"
+                  (click)="updateEvent()">
+        💾 Išsaugoti pakeitimus
+      </ion-button>
+
+      <!-- CANCEL -->
+      <ion-button expand="block"
+                  color="medium"
+                  fill="outline"
+                  *ngIf="editingEventId"
+                  (click)="resetForm()">
+        ❌ Atšaukti redagavimą
+      </ion-button>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!-- 📋 EVENT LIST -->
+  <ion-list *ngIf="events.length > 0">
+    <ion-list-header>
+      <ion-label>Mano renginiai</ion-label>
+    </ion-list-header>
+
+    <ion-item *ngFor="let event of events">
+      <ion-label>
+        <h2>{{ event.title }}</h2>
+        <p>{{ event.date }} – {{ event.location }}</p>
+      </ion-label>
+
+      <!-- EDIT -->
+      <ion-button fill="clear"
+                  color="warning"
+                  (click)="startEdit(event)">
+        ✏️
+      </ion-button>
+
+      <!-- DELETE -->
+      <ion-button fill="clear"
+                  color="danger"
+                  (click)="deleteEvent(event.id)">
+        🗑
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-text *ngIf="events.length === 0">
+    Kol kas neturite sukurtų renginių
+  </ion-text>
+
+</ion-content>
